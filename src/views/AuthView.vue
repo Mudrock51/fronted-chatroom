@@ -10,10 +10,10 @@
 </template>
 
 <script>
-import LoginForm from '../components/LoginForm.vue';
-import RegisterForm from '../components/RegisterForm.vue';
-import ForgotPasswordForm from '../components/ForgotPasswordForm.vue';
-import ResetPasswordForm from '../components/ResetPasswordForm.vue';
+import LoginForm from '../components/Auth/LoginForm.vue';
+import RegisterForm from '../components/Auth/RegisterForm.vue';
+import ForgotPasswordForm from '../components/Auth/ForgotPasswordForm.vue';
+import ResetPasswordForm from '../components/Auth/ResetPasswordForm.vue';
 
 export default {
   name: 'AuthView',

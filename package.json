@@ -9,8 +9,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@vitejs/plugin-vue": "^5.0.4",
     "axios": "^1.7.2",
+    "bootstrap": "^5.3.3",
     "core-js": "^3.6.5",
     "serve": "^14.2.3",
     "vite": "^5.2.11",
