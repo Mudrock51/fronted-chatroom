@@ -54,7 +54,7 @@ export default {
   width: 95%;
 }
 
-/* 这里修改消息样式 */
+/* 这里写消息 */
 .message {
   background-color: #fff;
   padding: 10px;

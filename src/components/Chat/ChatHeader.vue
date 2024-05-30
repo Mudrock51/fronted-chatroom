@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="d-flex align-items-center">
         <img src="../../assets/avatar/avatar.jpg" alt="Avatar" class="avatar rounded-circle">
-        <span class="navbar-brand mb-0 h1 ms-2">xuepeek Yang</span>
+        <span class="navbar-brand mb-0 h1 ms-2">Kristen Taylor</span>
       </div>
 
       <div class="container-fluid">

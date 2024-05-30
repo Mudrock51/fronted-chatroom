@@ -54,8 +54,7 @@ export default {
 }
 
 .sidebar {
-  flex: 0 0 280px;
-  background-color: #f0f8ff; /* 淡蓝色背景 */
+  flex: 0 0 100px;
 }
 
 .chat-content {
@@ -96,7 +95,7 @@ export default {
   border-top: 1px solid #ddd;
   position: fixed;
   bottom: 10px;
-  left: 310px; /* 确保不覆盖Sidebar */
-  width: calc(100% - 320px); /* 确保不覆盖Sidebar */
+  left: 250px; /* 确保不覆盖Sidebar */
+  width: calc(100% - 300px); /* 确保不覆盖Sidebar */
 }
 </style>
