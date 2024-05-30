@@ -1,7 +1,7 @@
 <template>
-  <div class="d-flex flex-column flex-shrink-0 p-3 text-white sidebar" style="width: 280px;">
+  <div class="d-flex flex-column flex-shrink-0 p-3 bg-white text-white" style="width: 280px;">
     <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-      <span class="fs-4">Sidebar</span>
+      <span class="fs-4 text-black">ChatRoom</span>
     </a>
     <hr>
 <!--    这里设置侧边栏列表样式   -->
@@ -19,7 +19,7 @@
       </li>
     </ul>
     <hr>
-    <!--  -->
+    <!-- 这里是下拉菜单样式 -->
     <div class="dropup">
       <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="true">
         <img src="../../assets/avatar/avatar.jpg" alt="" width="32" height="32" class="rounded-circle me-2">
@@ -67,9 +67,6 @@ export default {
 </script>
 
 <style scoped>
-.sidebar {
-  background-color: #40A070;
-}
 
 .nav-item {
   margin: 20px;
@@ -79,7 +76,6 @@ export default {
   display: flex;
   align-items: center;
   padding: 5px 5px;
-  color: black;
   text-decoration: none;
   position: relative;
 }
