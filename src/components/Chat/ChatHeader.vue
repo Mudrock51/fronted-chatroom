@@ -1,23 +1,16 @@
 <template>
-  <nav class="chat-header navbar navbar-light bg-light">
+  <nav class="chat-header navbar navbar-light bg-light bg-body-tertiary">
     <div class="container-fluid">
       <div class="d-flex align-items-center">
-        <img src="src/assets/avatar/avatar.png" alt="Avatar" class="avatar rounded-circle">
+        <img src="../../assets/avatar/avatar.jpg" alt="Avatar" class="avatar rounded-circle">
         <span class="navbar-brand mb-0 h1 ms-2">xuepeek Yang</span>
       </div>
-      <div class="d-flex">
-        <button class="btn btn-outline-secondary me-2" type="button">
-          <i class="bi bi-search"></i>
-        </button>
-        <button class="btn btn-outline-secondary me-2" type="button">
-          <i class="bi bi-telephone"></i>
-        </button>
-        <button class="btn btn-outline-secondary me-2" type="button">
-          <i class="bi bi-camera-video"></i>
-        </button>
-        <button class="btn btn-outline-secondary" type="button">
-          <i class="bi bi-info-circle"></i>
-        </button>
+
+      <div class="container-fluid">
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="在这里搜索用户、聊天记录或者文件..." aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
       </div>
     </div>
   </nav>
@@ -36,5 +29,9 @@ export default {
 .avatar {
   width: 40px;
   height: 40px;
+}
+
+.d-flex {
+  margin: 5px;
 }
 </style>

@@ -1,10 +1,10 @@
 <template>
   <div class="auth-container">
     <div class="form-wrapper">
-      <LoginForm v-if="currentForm === 'login'" @switch-form="switchForm" />
-      <RegisterForm v-if="currentForm === 'register'" @switch-form="switchForm" />
-      <ForgotPasswordForm v-if="currentForm === 'forgot'" @switch-form="switchForm" />
-      <ResetPasswordForm v-if="currentForm === 'reset'" @switch-form="switchForm" />
+      <LoginForm v-if="currentForm === 'login'" @switch-form="handleSwitchForm" />
+      <RegisterForm v-if="currentForm === 'register'" @switch-form="handleSwitchForm" />
+      <ForgotPasswordForm v-if="currentForm === 'forgot'" @switch-form="handleSwitchForm" />
+      <ResetPasswordForm v-if="currentForm === 'reset'" @switch-form="handleSwitchForm" />
     </div>
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
     };
   },
   methods: {
-    switchForm(form) {
+    handleSwitchForm(form) {
       this.currentForm = form;
     }
   }

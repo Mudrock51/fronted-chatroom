@@ -7,8 +7,8 @@
         <input type="email" v-model="email" placeholder="输入邮箱" required class="form-control" />
       </div>
       <button type="submit" class="btn">下一步</button>
-      <p class="switch-form">
-        <a @click.prevent="switchToLogin">返回登录界面</a>
+      <p>
+        <a class="switch-form" @click.prevent="switchToLogin">返回登录界面</a>
       </p>
     </form>
 
@@ -145,6 +145,11 @@ export default {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
+}
+
+.switch-form {
+  border-radius: 5px;
+  color: #5e00b3;
 }
 
 .btn {

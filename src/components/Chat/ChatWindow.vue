@@ -47,12 +47,14 @@ export default {
   margin-bottom: 70px; /* 留出输入框的位置 */
 }
 
+/* 这里写输入框样式 */
 .message-container {
   display: flex;
   justify-content: flex-end;
-  width: 100%;
+  width: 95%;
 }
 
+/* 这里修改消息样式 */
 .message {
   background-color: #fff;
   padding: 10px;
