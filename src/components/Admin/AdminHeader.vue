@@ -55,6 +55,14 @@ export default {
 }
 
 
+.search-icon {
+  position: absolute; /* 绝对定位 */
+  left: 0.75rem; /* 设置SVG图标的位置 */
+  top: 50%; /* 垂直居中 */
+  transform: translateY(-50%); /* 垂直居中 */
+  pointer-events: none; /* 使图标不可点击 */
+}
+
 .search-form {
   position: relative; /* 使表单内的元素可以相对定位 */
 }
@@ -64,13 +72,7 @@ export default {
   padding-left: 2.5rem; /* 为输入框左侧添加内边距，以确保SVG不覆盖文本 */
 }
 
-.search-icon {
-  position: absolute; /* 绝对定位 */
-  left: 0.75rem; /* 设置SVG图标的位置 */
-  top: 50%; /* 垂直居中 */
-  transform: translateY(-50%); /* 垂直居中 */
-  pointer-events: none; /* 使图标不可点击 */
-}
+
 
 .admin-text{
   color: #000000;
