@@ -44,6 +44,7 @@ export default {
         // Handle error, e.g., show error message
       }
     },
+
     switchForm(form) {
       this.$emit('switch-form', form);
     }

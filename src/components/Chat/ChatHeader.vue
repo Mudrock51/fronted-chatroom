@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="d-flex align-items-center">
         <img src="../../assets/avatar/avatar.jpg" alt="Avatar" class="avatar rounded-circle">
-        <span class="navbar-brand mb-0 h1 ms-2">Kristen Taylor</span>
+        <span class="navbar-brand mb-0 h1 ms-2">{{ username }}</span>
       </div>
 
       <div class="container-fluid">
@@ -21,7 +21,13 @@
 
 <script>
 export default {
-  name: 'ChatHeader'
+  name: 'ChatHeader',
+  props: {
+    username: {
+      type: String,
+      required: true
+    }
+  }
 }
 </script>
 
@@ -46,7 +52,7 @@ export default {
   padding-left: 2.5rem; /* 为输入框左侧添加内边距，以确保SVG不覆盖文本 */
 }
 
-.search-form{
+.search-form {
   position: relative;
 }
 

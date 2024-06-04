@@ -20,12 +20,6 @@
 
     </div>
 
-
-
-
-
-
-
   </nav>
 </template>
 
