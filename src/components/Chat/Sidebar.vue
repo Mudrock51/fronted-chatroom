@@ -1,8 +1,6 @@
 <template>
-  <div class="d-flex flex-column flex-shrink-0 p-3 bg-white text-white" style="width: 280px;">
-    <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-      <span class="fs-4 text-black">ChatRoom</span>
-    </a>
+<!--  在这里修改侧边导航栏的水平 width -->
+  <div class="d-flex flex-column flex-shrink-0 p-3 bg-white text-white" style="width: 60px;">
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item" v-for="item in menuItems" :key="item.name">
@@ -13,11 +11,12 @@
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path :d="item.iconPath" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          {{ item.label }}
+<!--          {{ item.label }}-->
         </a>
       </li>
     </ul>
     <hr>
+<!--    下拉菜单    -->
     <div class="dropup">
       <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="true">
         <img src="../../assets/avatar/avatar.jpg" alt="" width="32" height="32" class="rounded-circle me-2">
@@ -66,32 +65,22 @@ export default {
 
 <style scoped>
 .nav-item {
-  margin: 20px;
+  margin: 20px 0; /* 调整 margin 以适应窄侧边栏 */
 }
 
 .nav-item .nav-link {
   display: flex;
-  align-items: center;
-  padding: 5px 5px;
+  justify-content: center; /* 居中图标 */
+  padding: 5px;
   text-decoration: none;
-  position: relative;
-}
-
-.nav-item .nav-link.active::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background-color: black;
 }
 
 .nav-item .nav-link svg {
-  margin-right: 10px;
+  margin: 0;
 }
 
-.nav-item .nav-link .bi {
-  margin-left: 10px;
+.dropup .dropdown-toggle strong {
+  display: none; /* 隐藏用户名 */
 }
+
 </style>

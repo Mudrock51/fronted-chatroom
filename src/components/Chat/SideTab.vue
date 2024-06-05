@@ -15,7 +15,6 @@
         </li>
       </template>
     </ul>
-    <button class="btn btn-primary mt-auto">{{ buttonText }}</button>
   </div>
 </template>
 
@@ -39,10 +38,6 @@ export default {
       type: String,
       default: ''
     },
-    buttonText: {
-      type: String,
-      default: '操作按钮'
-    }
   },
   methods: {
     selectUser(user) {
@@ -105,7 +100,4 @@ export default {
   transition: background-color 0.3s ease;
 }
 
-.btn-primary:hover {
-  background-color: #0c7cd5;
-}
 </style>

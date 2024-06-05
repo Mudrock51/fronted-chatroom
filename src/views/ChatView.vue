@@ -110,12 +110,11 @@ export default {
 }
 
 .sidebar {
-  flex: 0 0 150px;
-  background-color: #f0f8ff; /* 淡蓝色背景 */
+  flex: 0 0 20px
 }
 
 .side-tab {
-  flex: 0 0 350px; /* 设置宽度为250px */
+  flex: 0 0 400px; /* 设置宽度为400px */
 }
 
 .chat-content {
@@ -160,3 +159,4 @@ export default {
   width: calc(100% - 640px); /* 确保不覆盖 SideTab 和 Sidebar */
 }
 </style>
+
