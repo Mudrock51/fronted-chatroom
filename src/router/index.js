@@ -4,6 +4,7 @@ import AuthView from '@/views/AuthView.vue';
 import ChatView from '@/views/ChatView.vue';
 import Admin from "@/views/Admin.vue";
 
+
 Vue.use(Router);
 
 const routes = [
