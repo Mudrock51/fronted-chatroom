@@ -32,13 +32,19 @@ export default {
   methods: {
     async login() {
       try {
+        // 使用axios发送POST请求到后端的/user/login 接口
         const response = await axios.post('/user/login', {
           username: this.username,
           password: this.password
         });
         console.log(response.data);
         // Handle successful login, redirect to chat room page
-        await this.$router.push('/chat');
+       const user = response.data;
+       if(user.username === 'admin'){
+         await this.$router.push('/admin');
+       }else{
+         await this.$router.push('/chat');
+       }
       } catch (error) {
         console.error(error);
         // Handle error, e.g., show error message
