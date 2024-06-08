@@ -1,6 +1,6 @@
 <template>
   <div class="chat-window" ref="chatWindow">
-    <div v-for="(msg, index) in messages" :key="index" class="message-container">
+    <div v-for="(msg, index) in messages" :key="index" :class="['message-container', msg.sender === 'me' ? 'sent' : 'received']">
       <div class="message">
         {{ msg }}
       </div>
@@ -52,6 +52,15 @@ export default {
   display: flex;
   justify-content: flex-end;
   width: 95%;
+  margin-bottom: 10px;
+}
+
+.message-container.sent {
+  justify-content: flex-end;
+}
+
+.message-container.received {
+  justify-content: flex-start;
 }
 
 /* 这里写消息 */
@@ -59,8 +68,16 @@ export default {
   background-color: #fff;
   padding: 10px;
   border-radius: 5px;
-  text-align: right;
-  margin-bottom: 10px;
   max-width: 80%;
+}
+
+.message-container.sent .message {
+  background-color: #e1ffc7; /* 本地用户消息背景色 */
+  text-align: right;
+}
+
+.message-container.received .message {
+  background-color: #fff; /* 接收到的消息背景色 */
+  text-align: left;
 }
 </style>

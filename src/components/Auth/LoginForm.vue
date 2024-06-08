@@ -39,14 +39,17 @@ export default {
         });
         console.log(response.data);
         // Handle successful login, redirect to chat room page
-       const user = response.data;
-       if(user.username === 'admin'){
-         await this.$router.push('/admin');
-       }else{
-         await this.$router.push('/chat');
-       }
+        const user = response.data;
+
+        await this.$store.dispatch('setUser', user);
+
+        if(user.username === 'admin'){
+          await this.$router.push('/admin');
+        }else{
+          await this.$router.push(`/chat/${user.userId}`);
+        }
       } catch (error) {
-        console.error(error);
+        console.error('登录失败', error);
         // Handle error, e.g., show error message
       }
     },

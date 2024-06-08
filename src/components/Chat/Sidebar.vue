@@ -7,11 +7,11 @@
         <a href="#"
            class="nav-link"
            :class="{ active: selectedItem === item.name }"
-           @click.prevent="selectItem(item.name)">
+           @click.prevent="handleSidebarItemSelected(item.name)">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path :d="item.iconPath" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-<!--          {{ item.label }}-->
+    <!--{{ item.label }}-->
         </a>
       </li>
     </ul>
@@ -55,9 +55,28 @@ export default {
   },
 
   methods: {
-    selectItem(ItemName) {
-      this.selectedItem = ItemName;
-      this.$emit('itemSelected', ItemName); // 发出 itemSelected 事件并传递选择的项目名称
+
+    // 处理侧边栏选择逻辑
+    handleSidebarItemSelected(itemName) {
+      this.selectedItem = itemName;
+      let sideTabContent;
+      switch (itemName) {
+        case 'PersonChat':
+          sideTabContent = { title: '私人聊天', contentType: 'list', listItems: ['用户1'] };
+          break;
+        case 'GroupChat':
+          sideTabContent = { title: '群组聊天', contentType: 'list', listItems: ['应用软件架构课程设计群', '2024汇编语言', '2024软工实习'] };
+          break;
+        case 'File':
+          sideTabContent = { title: '文件管理', contentType: 'text', textContent: '这里显示的是文件相关内容。' };
+          break;
+        case 'Setting':
+          sideTabContent = { title: '设置', contentType: 'list', listItems: ['设置 1', '设置 2', '设置 3'] };
+          break;
+        default:
+          sideTabContent = { title: '功能菜单', contentType: 'list', listItems: ['选项 1', '选项 2', '选项 3'] };
+      }
+      this.$emit('updateSideTabContent', sideTabContent);
     }
   }
 }

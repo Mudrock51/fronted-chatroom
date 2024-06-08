@@ -3,9 +3,9 @@
     <h2 class="side-tab__title fs-4">{{ title }}</h2>
     <ul class="nav nav-pills flex-column mb-auto">
       <template v-if="contentType === 'list'">
-        <li v-for="item in listItems" :key="item" class="nav-item">
-          <a href="#" class="nav-link" @click.prevent="selectUser(item)">
-            {{ item }}
+        <li v-for="item in listItems" :key="item.name" class="nav-item">
+          <a href="#" class="nav-link" @click.prevent="selectItem(item)">
+            {{ item.label }}
           </a>
         </li>
       </template>
@@ -19,29 +19,50 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "SideTab",
-  props: {
-    title: {
-      type: String,
-      default: '功能菜单'
-    },
-    contentType: {
-      type: String,
-      default: 'list' // 可选值: 'list', 'text'
-    },
-    listItems: {
-      type: Array,
-      default: () => ['选项 1', '选项 2', '选项 3']
-    },
-    textContent: {
-      type: String,
-      default: ''
-    },
+  props: ['userId'],
+  data() {
+    return {
+      title: '功能菜单',
+      contentType: 'list',
+      listItems: [
+        { name: 'user1', label: '用户1', groupId: 1 },
+        { name: 'user2', label: '用户2', groupId: 2 },
+        { name: 'user3', label: '用户3', groupId: 3 }
+      ],
+      textContent: ''
+    };
+  },
+  computed: {
+    ...mapState(['user'])
   },
   methods: {
-    selectUser(user) {
-      this.$emit('selectUser', user);
+    selectItem(item) {
+      const userId = this.user?.userId;
+
+      if (!userId) {
+        console.error('userId is undefined');
+        return;
+      }
+
+      const groupId = item.groupId;
+
+      this.updateSideTab(item.label, 'list', this.listItems);
+      this.$store.dispatch('setGroupId', { userId, groupId });
+      this.$router.push(`/chat/${userId}/${groupId}`).catch(() => {});
+      this.$emit('selectUser', item.label);
+    },
+    updateSideTab(title, contentType, listItems = [], textContent = '') {
+      this.title = title;
+      this.contentType = contentType;
+      this.listItems = listItems;
+      this.textContent = textContent;
+    },
+    updateSideTabContent({ title, contentType, listItems = [], textContent = '' }) {
+      this.updateSideTab(title, contentType, listItems, textContent);
     }
   }
 }
@@ -49,12 +70,12 @@ export default {
 
 <style scoped>
 .side-tab {
-  background-color: #f0f8ff; /* 淡蓝色背景 */
+  background-color: #f0f8ff;
   border-left: 1px solid #ccc;
   border-right: 1px solid #ccc;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .side-tab__title {
@@ -88,16 +109,4 @@ export default {
   border-radius: 5px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
-
-.btn-primary {
-  padding: 10px 20px;
-  font-size: 1em;
-  background-color: #1e90ff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
 </style>

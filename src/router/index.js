@@ -7,16 +7,35 @@ import Admin from "@/views/Admin.vue";
 
 Vue.use(Router);
 
-const routes = [
-    { path: '/', redirect: '/user' },
-    { path: '/user', component: AuthView },
-    { path: '/chat', component: ChatView },
-    { path: '/admin',component: Admin},
-];
-
-const router = new Router({
+export default new Router({
     mode: 'history',
-    routes
-});
 
-export default router;
+    // 在下面添加路由
+    routes: [
+        {
+            path: '/',
+            redirect: '/user'
+        },
+        {
+            path: '/user',
+            name: 'Login',
+            component: AuthView
+        },
+        {
+            path: '/chat/:userId?',
+            name: 'ChatPreview',
+            component: ChatView
+        },
+        {
+            path: '/chat/:userId/:groupId?',
+            name: 'Chat',
+            component: ChatView,
+            props: true
+        },
+        {
+            path: '/admin',
+            name: 'Admin',
+            component: Admin
+        }
+    ]
+});

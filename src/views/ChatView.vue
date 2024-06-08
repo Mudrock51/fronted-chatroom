@@ -1,95 +1,223 @@
 <template>
   <div class="chat-container">
     <div class="chat-wrapper">
-      <Sidebar class="sidebar" @itemSelected="handleItemSelected" />
-      <SideTab class="side-tab"
-               :title="sideTabTitle"
-               :contentType="sideTabContentType"
-               :listItems="sideTabListItems"
-               :textContent="sideTabTextContent"
-               :buttonText="sideTabButtonText"
-               @selectUser="updateCurrentChatName" />
+      <Sidebar class="sidebar" @updateSideTabContent="handleSidebarItemSelected" />
+      <SideTab class="side-tab" ref="sideTab" @selectUser="handleItemSelected" />
       <div class="chat-content">
         <ChatHeader :username="currentChatName" class="chat-header" />
         <ChatWindow :messages="messages" class="chat-window" />
-        <ChatInput class="chat-input" @sendMessage="addMessage" />
+        <ChatInput class="chat-input" @sendMessage="sendMessage" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import axios from 'axios';
 import Sidebar from '../components/Chat/Sidebar.vue';
 import ChatHeader from '../components/Chat/ChatHeader.vue';
 import ChatWindow from '../components/Chat/ChatWindow.vue';
 import ChatInput from '../components/Chat/ChatInput.vue';
-import SideTab from '../components/Chat/SideTab.vue'; // 引入 SideTab 组件
+import SideTab from '../components/Chat/SideTab.vue';
 
 export default {
   name: 'ChatView',
+
+  // 视图 View 下注册的组件
   components: {
     Sidebar,
     ChatHeader,
     ChatWindow,
     ChatInput,
-    SideTab // 注册 SideTab 组件
+    SideTab
   },
+  props: ['userId', 'groupId'],
+
   data() {
     return {
-      messages: ["Hello", "How are you?", "This is a test message", 'Wish you can have a nice day!'], // 示例消息
+      ws: null,
+      messages: [],
       currentChatName: 'Kristen Taylor',
-      sideTabTitle: '功能菜单',
-      sideTabContentType: 'list',
-      sideTabListItems: ['选项 1', '选项 2', '选项 3'],
-      sideTabTextContent: '',
-      sideTabButtonText: '操作按钮'
+      currentGroupId: this.groupId,
     };
   },
+
+  // 登录时建立WebSocket连接
+  mounted() {
+    if (this.currentGroupId) {
+      this.initWebSocket(this.currentGroupId);
+    }
+  },
+
+  // 离开时销毁WebSocket连接
+  unmounted() {
+    if (this.ws) {
+      this.ws.onclose(undefined);
+    }
+  },
+
+  // 将 Vuex 中的 `user`、`message` 状态映射到当前组件的计算属性中。
+  // 可以在当前组件通过 `this.user`和`this.message` 来访问该状态。
+  computed: {
+    ...mapState(['user', 'groupIdMap'])
+  },
+
+  //
+  watch: {
+    groupId: {
+      handler: 'fetchMessages',
+      immediate: true
+    }
+  },
+
   methods: {
-    addMessage(message) {
-      this.messages.push(message); // 修改为添加到末尾
-    },
-    handleItemSelected(itemName) {
-      switch (itemName) {
-        case 'PersonChat':
-          this.currentChatName = '私人聊天用户';
-          this.sideTabTitle = '私人聊天';
-          this.sideTabContentType = 'list';
-          this.sideTabListItems = ['用户1', '用户2', '用户3'];
-          this.sideTabButtonText = '开始私人聊天';
-          break;
-        case 'GroupChat':
-          this.currentChatName = '群组聊天';
-          this.sideTabTitle = '群组聊天';
-          this.sideTabContentType = 'list';
-          this.sideTabListItems = ['应用软件架构课程设计群', '2024汇编语言', '2024软工实习'];
-          this.sideTabButtonText = '进入群组聊天';
-          break;
-        case 'File':
-          this.currentChatName = '文件管理';
-          this.sideTabTitle = '文件';
-          this.sideTabContentType = 'text';
-          this.sideTabTextContent = '这里显示的是文件相关内容。';
-          this.sideTabButtonText = '管理文件';
-          break;
-        case 'Setting':
-          this.currentChatName = '设置';
-          this.sideTabTitle = '设置';
-          this.sideTabContentType = 'list';
-          this.sideTabListItems = ['设置 1', '设置 2', '设置 3'];
-          this.sideTabButtonText = '保存设置';
-          break;
-        default:
-          this.currentChatName = 'Kristen Taylor';
-          this.sideTabTitle = '功能菜单';
-          this.sideTabContentType = 'list';
-          this.sideTabListItems = ['选项 1', '选项 2', '选项 3'];
-          this.sideTabButtonText = '操作按钮';
+    // 从后端拉取信息
+    async fetchMessages() {
+      if (this.groupId) {
+        try {
+          const response = await axios.get(`/chat/${this.userId}/${this.groupId}/message`);
+          console.log('Fetched messages:', response.data);
+          this.messages = response.data.map(msg => ({
+            ...msg,
+            sender: msg.userId === this.user.userId ? 'me' : 'other'
+          }));
+        } catch (error) {
+          console.error('Failed to fetch messages:', error);
+        }
       }
     },
+
+    // 发送消息
+    async sendMessage(messageContent) {
+      const messageDTO = {
+        groupId: this.currentGroupId.toString(),
+        content: messageContent,
+        userId: this.user.userId,
+        sender: 'me'
+      };
+
+      // 使用 WebSocket 发送消息
+      if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+        this.ws.send(JSON.stringify(messageDTO));
+      } else {
+        console.error('WebSocket is not open.');
+      }
+
+      // 将消息存储在本地的message[]中
+      this.addMessage({
+        content: messageContent,
+        sender: 'me',
+        userId: this.user.userId,
+        groupId: this.currentGroupId
+      });
+    },
+
+    // 本地添加消息
+    addMessage(message) {
+      this.messages.push(message);
+      this.$store.dispatch('addMessage', { message, groupId: this.currentGroupId });
+    },
+
+
+    // 处理Sidebar的选择
+    handleSidebarItemSelected(sideTabContent) {
+      this.$refs.sideTab.updateSideTabContent(sideTabContent);
+    },
+
+    // 处理SideTab的选择
+    handleItemSelected(itemName) {
+      // 仅处理 SideTab 的私人聊天和群组聊天名称
+      this.updateCurrentChatName(itemName);
+      // 这里定义 userId 需要使用语法 this.user?.userId
+      const userId = this.user?.userId;
+
+      if (!userId) {
+        console.error('userId is undefined');
+        return;
+      }
+
+      const selectedItem = this.$refs.sideTab.listItems.find(item => item === itemName);
+      if (selectedItem) {
+        const groupId = selectedItem.groupId;
+        this.$router.push(`/chat/${userId}/${groupId}`).catch(() => {});
+        this.initWebSocket(groupId);
+      }
+    },
+
+    // 更新当前聊天ChatWindow的视图
     updateCurrentChatName(chatName) {
       this.currentChatName = chatName;
+
+      // 用户名唯一且作为唯一标识符
+      const otherUserId = chatName;
+
+      // 检查是否已有groupId存在，否则创建一个新的整数groupId
+      if (this.groupIdMap[otherUserId]) {
+        this.currentGroupId = this.groupIdMap[otherUserId];
+      } else {
+        this.currentGroupId = Math.floor(Math.random() * 10000);
+        this.$store.dispatch('setGroupId', { otherUserId, groupId: this.currentGroupId });
+      }
+
+      // 更新路由
+      const userId = this.user?.userId;
+      if (userId) {
+        this.$router.push(`/chat/${userId}/${this.currentGroupId}`).catch(() => {});
+      } else {
+        console.error('userId is undefined');
+      }
+
+      this.initWebSocket(this.currentGroupId);
+    },
+
+    initWebSocket(groupId) {
+      if (!groupId) {
+        console.error('groupId is undefined');
+        return;
+      }
+
+      if (this.ws) {
+        this.ws.close();
+      }
+
+      let serverHost = window.location.hostname;
+      let url = `ws://${serverHost}:8088/api/chat/${this.user?.userId}/${groupId}`;
+      this.ws = new WebSocket(url);
+
+      this.ws.onopen = () => { console.log(`连接成功：${url}`); };
+      this.ws.onclose = () => { console.log(`连接关闭：${url}`); };
+      this.ws.onerror = () => { console.log(`连接错误：${url}`); };
+      this.ws.onmessage = (e) => {
+
+        // 解析传输回来的Json字符串数据
+        let resData = JSON.parse(e.data);
+
+        console.log("e:", e);
+
+        // 区分上下线和消息
+        if (resData.type === "status") {
+          // 打印消息
+          console.log("Get a state message");
+        } else {
+          // 打印消息
+          console.log("Get a user message")
+          if (resData.userId !== this.user?.userId){
+            // 在本地屏幕上输出其它用户传输的消息
+            this.addMessage({
+              content: resData.content,
+              sender: 'other',
+              userId: resData.userId,
+              groupId: this.currentGroupId
+            });
+          }
+        }
+      };
     }
+  },
+
+  created() {
+    this.fetchMessages();
   }
 };
 </script>
@@ -100,7 +228,7 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #e0f7fa; /* 淡蓝色背景 */
+  background-color: #e0f7fa;
 }
 
 .chat-wrapper {
@@ -110,18 +238,18 @@ export default {
 }
 
 .sidebar {
-  flex: 0 0 20px
+  flex: 0 0 60px;
 }
 
 .side-tab {
-  flex: 0 0 400px; /* 设置宽度为400px */
+  flex: 0 0 250px;
 }
 
 .chat-content {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  background-color: #f0f8ff; /* 淡蓝色背景 */
+  background-color: #f0f8ff;
 }
 
 .chat-header,
@@ -131,7 +259,7 @@ export default {
 }
 
 .chat-header {
-  background-color: #1e90ff; /* 深蓝色背景 */
+  background-color: #1e90ff;
   color: white;
   padding: 10px;
   border-radius: 5px;
@@ -139,24 +267,23 @@ export default {
 
 .chat-window {
   flex-grow: 1;
-  background-color: #f0f8ff; /* 淡蓝色背景 */
+  background-color: #f0f8ff;
   border-radius: 5px;
   padding: 10px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  margin-bottom: 70px; /* 留出输入框的位置 */
+  margin-bottom: 70px;
 }
 
 .chat-input {
-  background-color: #f0f8ff; /* 淡蓝色背景 */
+  background-color: #f0f8ff;
   border-radius: 5px;
   padding: 10px;
   border-top: 1px solid #ddd;
   position: fixed;
   bottom: 10px;
-  left: 590px; /* 确保不覆盖 SideTab 和 Sidebar */
-  width: calc(100% - 640px); /* 确保不覆盖 SideTab 和 Sidebar */
+  left: 310px;
+  width: calc(100% - 360px);
 }
 </style>
-
