@@ -4,8 +4,11 @@
       <Sidebar class="sidebar" @updateSideTabContent="handleSidebarItemSelected" />
       <SideTab class="side-tab" ref="sideTab" @selectUser="handleItemSelected" />
       <div class="chat-content">
+<!--   设置聊天标题     -->
         <ChatHeader :username="currentChatName" class="chat-header" />
+<!--   获取聊天内容     -->
         <ChatWindow :messages="messages" class="chat-window" />
+<!--   消息框发送信息的逻辑     -->
         <ChatInput class="chat-input" @sendMessage="sendMessage" />
       </div>
     </div>
@@ -38,7 +41,7 @@ export default {
     return {
       ws: null,
       messages: [],
-      currentChatName: 'Kristen Taylor',
+      currentChatName: '',
       currentGroupId: this.groupId,
     };
   },
@@ -72,7 +75,7 @@ export default {
   },
 
   methods: {
-    // 从后端拉取信息
+    // 从后端拉取历史记录
     async fetchMessages() {
       if (this.groupId) {
         try {
@@ -80,6 +83,7 @@ export default {
           console.log('Fetched messages:', response.data);
           this.messages = response.data.map(msg => ({
             ...msg,
+            content: msg.messageContent,
             sender: msg.userId === this.user.userId ? 'me' : 'other'
           }));
         } catch (error) {
@@ -113,7 +117,7 @@ export default {
       });
     },
 
-    // 本地添加消息
+    // 本地添加消息、实时更新在网页
     addMessage(message) {
       this.messages.push(message);
       this.$store.dispatch('addMessage', { message, groupId: this.currentGroupId });
