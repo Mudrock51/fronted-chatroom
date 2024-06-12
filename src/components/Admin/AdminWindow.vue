@@ -6,7 +6,7 @@
 
 <script>
 import UserManagement from './UserManagement.vue';
-import GroupManagement from './GroupManagement.vue';
+import GroupManagement from './MessageManagement.vue';
 import FileManagement from './FileManagement.vue';
 import Settings from './Settings.vue';
 
