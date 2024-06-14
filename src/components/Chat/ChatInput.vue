@@ -1,7 +1,6 @@
 <template>
   <div class="chat-input">
     <input type="text" v-model="message" @keyup.enter="sendMessage" placeholder="Type your message..." />
-    <input type="file" @change="handleFileUpload" />
     <button @click="sendMessage">Send</button>
   </div>
 </template>
@@ -21,15 +20,6 @@ export default {
       if (this.message.trim() !== '') {
         this.$emit('sendMessage', this.message);
         this.message = '';
-      }
-
-      if (this.selectedFile) {
-        this.$emit('sendFile', this.selectedFile);
-        this.selectedFile = null;
-      }
-
-      handleFileUpload(event) {
-        this.selectedFile = event.target.files[0];
       }
     }
   }
