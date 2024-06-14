@@ -2,7 +2,7 @@
   <div class="chat-window" ref="chatWindow">
     <div v-for="(msg, index) in messages" :key="index" :class="['message-container', msg.sender === 'me' ? 'sent' : 'received']">
       <div class="message">
-        {{ msg }}
+        {{ msg.content }}
       </div>
     </div>
   </div>

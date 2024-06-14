@@ -133,6 +133,7 @@ export default {
     handleItemSelected(itemName) {
       // 仅处理 SideTab 的私人聊天和群组聊天名称
       this.updateCurrentChatName(itemName);
+
       // 这里定义 userId 需要使用语法 this.user?.userId
       const userId = this.user?.userId;
 
@@ -175,6 +176,7 @@ export default {
       this.initWebSocket(this.currentGroupId);
     },
 
+    // 初始化 WebSocket 的连接
     initWebSocket(groupId) {
       if (!groupId) {
         console.error('groupId is undefined');

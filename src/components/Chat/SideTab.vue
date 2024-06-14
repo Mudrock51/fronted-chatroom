@@ -26,19 +26,17 @@ export default {
   props: ['userId'],
   data() {
     return {
-      title: '功能菜单',
+      title: '默认',
       contentType: 'list',
-      listItems: [
-        { name: 'user1', label: '用户1', groupId: 1 },
-        { name: 'user2', label: '用户2', groupId: 2 },
-        { name: 'user3', label: '用户3', groupId: 3 }
-      ],
+      listItems: [],
       textContent: ''
     };
   },
+
   computed: {
     ...mapState(['user'])
   },
+
   methods: {
     selectItem(item) {
       const userId = this.user?.userId;
@@ -50,17 +48,19 @@ export default {
 
       const groupId = item.groupId;
 
-      this.updateSideTab(item.label, 'list', this.listItems);
+      this.updateSideTab(this.title, 'list', this.listItems);
       this.$store.dispatch('setGroupId', { userId, groupId });
       this.$router.push(`/chat/${userId}/${groupId}`).catch(() => {});
       this.$emit('selectUser', item.label);
     },
+
     updateSideTab(title, contentType, listItems = [], textContent = '') {
       this.title = title;
       this.contentType = contentType;
       this.listItems = listItems;
       this.textContent = textContent;
     },
+
     updateSideTabContent({ title, contentType, listItems = [], textContent = '' }) {
       this.updateSideTab(title, contentType, listItems, textContent);
     }
